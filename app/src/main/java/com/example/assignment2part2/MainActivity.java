@@ -1,6 +1,7 @@
 package com.example.assignment2part2;
 
 import android.location.Location;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,7 +30,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try{
-                    Task<Location> location = 
+                    Task<Location> location = client.getLastLocation();
+
+                    location.addOnCompleteListener(new OnCompleteListener<Location>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Location> task) {
+                            txtLatitude.setText(Double.toString(task.getResult().getLatitude()));
+                            txtLongitude.setText((Double.toString(task.getResult().getLongitude())));
+                            System.err.println(task.getResult().getLatitude());
+                        }
+                    });
+                }catch(SecurityException ex){
+                    ex.printStackTrace();
                 }
             }
         });

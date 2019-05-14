@@ -1,7 +1,11 @@
 package com.example.assignment2part2;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -15,7 +19,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 public class MainActivity extends AppCompatActivity {
-
     private static int Request_Location = 99;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +48,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
         LocationRequest req = new LocationRequest();
         req.setInterval(2000);
         req.setFastestInterval(500);
         req.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-
-
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+        != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION},Request_Location);
+        }
     }
 }

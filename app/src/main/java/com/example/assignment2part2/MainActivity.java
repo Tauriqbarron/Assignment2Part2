@@ -28,19 +28,19 @@ public class MainActivity extends AppCompatActivity {
         final TextView txtLongitude =(TextView) findViewById(R.id.txtLongitude);
         final Button btnGetLocation = (Button) findViewById(R.id.btnGetLocation);
         final FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(this);
-
         btnGetLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try{
-                    Task<Location> location = client.getLastLocation();
-
+                    final Task<Location> location = client.getLastLocation();
                     location.addOnCompleteListener(new OnCompleteListener<Location>() {
                         @Override
                         public void onComplete(@NonNull Task<Location> task) {
-                            txtLatitude.setText(Double.toString(task.getResult().getLatitude()));
-                            txtLongitude.setText((Double.toString(task.getResult().getLongitude())));
-                            System.err.println(task.getResult().getLatitude());
+                            if(location !=null) {
+                                txtLatitude.setText((Double.toString(task.getResult().getLatitude())));
+                                txtLongitude.setText((Double.toString(task.getResult().getLongitude())));
+                                System.err.println(task.getResult().getLatitude());
+                            }
                         }
                     });
                 }catch(SecurityException ex){
@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
         req.setInterval(2000);
         req.setFastestInterval(500);
         req.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
         != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,new String[]{

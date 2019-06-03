@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
         displayLocation(this);
     }
     public void displayLocation(Context context){
+
+        // This IF statement checks if permissions for the app to use location services has been granted
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,new String[]{
@@ -45,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
         }
         btnGetLocation = findViewById(R.id.btnGetLocation);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
+        // This function takes the last know location and displays the latitude and longitude on the
+        // activity
         btnGetLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
